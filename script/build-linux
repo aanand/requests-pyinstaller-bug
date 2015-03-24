@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+TAG="requests-pyinstaller-bug"
+BINARY="test"
+
+DOCKER_RUN="docker run --rm --user=user --volume=$(pwd)/dist:/code/dist $TAG"
+
+mkdir -p `pwd`/dist
+chmod 777 `pwd`/dist
+
+echo ">> Building Docker image"
+docker build -t "$TAG" . > /dev/null
+
+echo ">> Running bin/$BINARY"
+$DOCKER_RUN "bin/$BINARY"
+
+echo ">> Building dist/$BINARY"
+$DOCKER_RUN pyinstaller -F "bin/$BINARY" 2> /dev/null
+
+echo ">> Running dist/$BINARY"
+$DOCKER_RUN "dist/$BINARY"
+
+echo ">> Success"

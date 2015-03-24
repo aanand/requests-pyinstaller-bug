@@ -1,0 +1,4 @@
+#!/usr/bin/env python
+print "Importing requests"
+import requests
+print "Imported requests {}".format(requests.__version__)
